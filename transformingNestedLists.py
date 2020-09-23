@@ -1,3 +1,5 @@
+import math
+
 def unravel_list_string(nestedListsString):
     nestedListsString = nestedListsString[1:-2]
     listOfListsStrings = nestedListsString.split('], ')
@@ -14,6 +16,33 @@ def unravel_list_string(nestedListsString):
                 listOfListsStrings[i][j] = int(listOfListsStrings[i][j])
                 
     return listOfListsStrings
+
+def convert_list_to_matrix_string_list(givenList):
+
+    givenNumberOfRows = len(givenList)
+    givenNumberOfColumns = len(givenList[0])
+
+    biggestLengthByColumn = []
+    matrixStringList = []
+
+
+    for i in range(givenNumberOfColumns):
+        biggestLengthByColumn.append(0)
+        for j in range(givenNumberOfRows):
+            if biggestLengthByColumn[i] < len(str(givenList[j][i])): biggestLengthByColumn[i] = len(str(givenList[j][i]))
+    
+    for i in range(givenNumberOfRows):
+        matrixLine = ''
+        for j in range(givenNumberOfColumns):
+            spacesNeeded = biggestLengthByColumn[j] - len(str(givenList[i][j]))
+            for k in range(math.floor(spacesNeeded / 2)):
+                matrixLine += ' '
+            matrixLine += str(givenList[i][j])
+            for k in range(math.ceil(spacesNeeded / 2) + 1):
+                matrixLine += ' '
+        matrixStringList.append(matrixLine)
+
+    return matrixStringList
 
 def rotate_nested_lists(givenList, numberOfRotations):
     
@@ -60,9 +89,12 @@ def flip_nested_lists(givenList, numberOfHorizFlips, numberOfVertFlips):
 
     return givenList
 
-nestedListsFromInput = input("Input your list: ")
+nestedListsFromInput = input('Input your list: ')
 nestedList = unravel_list_string(nestedListsFromInput)
+for list in convert_list_to_matrix_string_list(nestedList):
+    print(list)
 
 nestedList = rotate_nested_lists(nestedList, 0)
 nestedList = flip_nested_lists(nestedList, 1, 0)
-print(nestedList)
+for list in convert_list_to_matrix_string_list(nestedList):
+    print(list)
